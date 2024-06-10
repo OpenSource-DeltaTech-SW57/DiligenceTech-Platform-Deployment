@@ -7,3 +7,19 @@ services:
     ports:
       - "8080:8080"
     restart: always
+    depends_on:
+      diligencetech-os:
+        condition: service_healthy
+  diligencetech-os:
+    image: mysql:8.0.33
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: tertimes
+      MYSQL_PASSWORD: tertimes
+      MYSQL_DATABASE: diligencetech-os
+    restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 10
